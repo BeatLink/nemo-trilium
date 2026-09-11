@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+"""Runs the command line, with the package beside this script on the import path."""
+
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from nemo_trilium.cli import main
+
+if __name__ == "__main__":
+    sys.exit(main())

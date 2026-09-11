@@ -1,0 +1,8 @@
+[Nemo Action]
+Name=Save to Trilium as…
+Comment=Choose the note in Trilium to save the selection under
+Icon-Name=trilium
+Exec=@bin@ send --ask %F
+Selection=notnone
+Extensions=any
+Quote=double
