@@ -51,7 +51,9 @@
                 }
             );
 
-            checks = forAllSystems (system: { build = self.packages.${system}.nemo-trilium; });
+            checks = forAllSystems (system: {
+                build = self.packages.${system}.nemo-trilium;
+            });
 
             overlays = {
                 default = final: _prev: { nemo-trilium = final.callPackage ./package.nix { }; };
@@ -62,6 +64,12 @@
                 default = self.homeManagerModules.nemo-trilium;
             };
 
-            formatter = forAllSystems (system: (pkgsFor system).nixfmt-tree);
+            formatter = forAllSystems (
+                system:
+                let
+                    pkgs = pkgsFor system;
+                in
+                pkgs.writeShellScriptBin "nixfmt-4" ''exec ${pkgs.nixfmt}/bin/nixfmt --indent 4 "$@"''
+            );
         };
 }

@@ -83,13 +83,15 @@ class SaveDialog(Gtk.Dialog):
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         box.set_border_width(12)
-        self.get_content_area().add(box)
+        # The content area packs with add(), which does not expand, so the note list would collapse.
+        self.get_content_area().pack_start(box, True, True, 0)
 
         box.add(self._title_widget())
         box.add(_heading("Save in"))
 
         self.search = Gtk.SearchEntry()
         self.search.set_placeholder_text("Search your notes")
+        self.search.set_activates_default(True)
         self.search.connect("search-changed", self._on_search_changed)
         box.add(self.search)
 
@@ -99,6 +101,7 @@ class SaveDialog(Gtk.Dialog):
         scroller = Gtk.ScrolledWindow()
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scroller.set_shadow_type(Gtk.ShadowType.IN)
+        scroller.set_min_content_height(220)
         scroller.add(self.list)
         box.pack_start(scroller, True, True, 0)
 

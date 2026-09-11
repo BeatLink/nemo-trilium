@@ -109,7 +109,7 @@ class Config:
                 timeout=self.timeout,
                 check=True,
             ).stdout
-        except FileNotFoundError as error:
+        except OSError as error:
             raise ConfigError(f"token_command could not be run: {error}") from error
         except subprocess.TimeoutExpired as error:
             raise ConfigError("token_command took too long to answer") from error

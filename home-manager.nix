@@ -11,10 +11,7 @@ let
 
     render =
         value:
-        if builtins.isBool value then
-            (if value then "true" else "false")
-        else
-            builtins.toString value;
+        if builtins.isBool value then (if value then "true" else "false") else builtins.toString value;
 
     settingsFile = lib.generators.toINI { mkKeyValue = key: value: "${key} = ${render value}"; } {
         trilium = cfg.settings;

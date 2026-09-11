@@ -96,3 +96,7 @@ def main(argv=None):
     except EtapiError as error:
         failure("Trilium refused the request", str(error))
         return 1
+    # Nemo gives the action no terminal, so an unexpected failure has to be shown somewhere.
+    except Exception as error:
+        failure("Saving to Trilium went wrong", f"{type(error).__name__}: {error}")
+        return 1

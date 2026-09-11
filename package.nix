@@ -48,9 +48,10 @@ stdenvNoCC.mkDerivation {
 
     doCheck = true;
 
+    # The cache prefix keeps the check from leaving build-directory .pyc files to be copied below.
     checkPhase = ''
         runHook preCheck
-        ${python}/bin/python -m compileall -q nemo_trilium nemo-trilium
+        PYTHONPYCACHEPREFIX=$TMPDIR/pycache ${python}/bin/python -m compileall -q nemo_trilium nemo-trilium
         runHook postCheck
     '';
 
@@ -70,6 +71,9 @@ stdenvNoCC.mkDerivation {
             install -Dm644 "$action" "$target"
             substituteInPlace "$target" --replace-fail '@bin@' "$out/bin/nemo-trilium"
         done
+
+        # Nothing can write to the store, so without these every launch would recompile the package.
+        ${python}/bin/python -m compileall -q $out/share/nemo-trilium/nemo_trilium
 
         runHook postInstall
     '';
