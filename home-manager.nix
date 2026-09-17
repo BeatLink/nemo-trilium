@@ -16,11 +16,6 @@ let
     settingsFile = lib.generators.toINI { mkKeyValue = key: value: "${key} = ${render value}"; } {
         trilium = cfg.settings;
     };
-
-    actions = [
-        "nemo-trilium@beatlink.nemo_action"
-        "nemo-trilium-ask@beatlink.nemo_action"
-    ];
 in
 {
     options.programs.nemo-trilium = {
@@ -61,15 +56,8 @@ in
             store. Use token_command to read it from a secret at runtime instead.
         '';
 
+        # Nemo finds the actions under the package's share/nemo/actions through XDG_DATA_DIRS.
         home.packages = [ cfg.package ];
-
-        # Nemo reads its actions from ~/.local/share/nemo/actions, not from XDG_DATA_DIRS.
-        xdg.dataFile = lib.listToAttrs (
-            map (action: {
-                name = "nemo/actions/${action}";
-                value.source = "${cfg.package}/share/nemo/actions/${action}";
-            }) actions
-        );
 
         xdg.configFile."nemo-trilium/config.ini" = lib.mkIf (cfg.settings != { }) {
             text = settingsFile;
